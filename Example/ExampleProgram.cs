@@ -17,7 +17,7 @@ namespace FirmwareFiles.Example
                 var exeName = System.IO.Path.GetFileName( System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName );
                 Console.WriteLine( $"USAGE: {exeName} <firmware_file_path>" );
             }
-        }
+        }ö
 
         private static void PrintFirmwareFileInfo( string filepath )
         {
@@ -39,7 +39,7 @@ namespace FirmwareFiles.Example
         private static Firmware Load( string filepath )
         {
             var extension = Path.GetExtension( filepath ).ToLower();
-
+            
             switch( extension )
             {
                 case ".hex":

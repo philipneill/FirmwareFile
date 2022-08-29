@@ -63,6 +63,7 @@ namespace FirmwareFile
 
             int lineNumber = 0;
             UInt32 extendedLinearAddress = 0;
+            UInt32 extendedSegmentAddress = 0;
             bool eofExpected = false;
 
             while( !fileReader.EndOfStream )
@@ -83,6 +84,7 @@ namespace FirmwareFile
                         var record = ProcessLine( line );
 
                         record.Address += extendedLinearAddress;
+                        record.Address += extendedSegmentAddress;
 
                         switch( record.Type )
                         {
@@ -95,7 +97,11 @@ namespace FirmwareFile
                                 break;
 
                             case RecordType.EXTENDED_LINEAR_ADDRESS:
-                                extendedLinearAddress = GetExtendedLinearAddress( record );
+                                extendedLinearAddress = GetExtendedLinearAddress(record);
+                                break;
+
+                            case RecordType.EXTENDED_SEGMENT_ADDRESS:
+                                extendedSegmentAddress = GetExtendedSegmentAddress(record);
                                 break;
 
                             default:
@@ -121,6 +127,8 @@ namespace FirmwareFile
         {
             DATA,
             EOF,
+            EXTENDED_SEGMENT_ADDRESS,
+            START_SEGMENT_ADDRESS,
             EXTENDED_LINEAR_ADDRESS,
             START_LINEAR_ADDRESS
         }
@@ -231,6 +239,12 @@ namespace FirmwareFile
                 case RECORD_TYPE_ELA_CODE:
                     return RecordType.EXTENDED_LINEAR_ADDRESS;
 
+                case RECORD_TYPE_ESA_CODE:
+                    return RecordType.EXTENDED_SEGMENT_ADDRESS;
+
+                case RECORD_TYPE_SSA_CODE:
+                    return RecordType.START_SEGMENT_ADDRESS;
+
                 case RECORD_TYPE_SLA_CODE:
                     return RecordType.START_LINEAR_ADDRESS;
 
@@ -239,14 +253,23 @@ namespace FirmwareFile
             }
         }
 
-        private static UInt32 GetExtendedLinearAddress( Record record )
+        private static UInt32 GetExtendedLinearAddress(Record record)
         {
-            if( record.Data.Length != 2 )
+            if (record.Data.Length != 2)
             {
-                throw new Exception( "Invalid data length for 'Extended Linear Address' record" );
+                throw new Exception("Invalid data length for 'Extended Linear Address' record");
             }
 
-            return ( ( (UInt32) record.Data[0] ) << 24 ) + ( ( (UInt32) record.Data[1] ) << 16 );
+            return (((UInt32)record.Data[0]) << 24) + (((UInt32)record.Data[1]) << 16);
+        }
+        private static UInt32 GetExtendedSegmentAddress(Record record)
+        {
+            if (record.Data.Length != 2)
+            {
+                throw new Exception("Invalid data length for 'Extended Segment Address' record");
+            }
+
+            return (((UInt32)record.Data[0]) << 12) + (((UInt32)record.Data[1]) << 4);
         }
 
         private static void ProcessDataRecord( Record record, Firmware fwFile )
@@ -262,6 +285,8 @@ namespace FirmwareFile
 
         private const int RECORD_TYPE_DATA_CODE = 0x00;
         private const int RECORD_TYPE_EOF_CODE = 0x01;
+        private const int RECORD_TYPE_ESA_CODE = 0x02;
+        private const int RECORD_TYPE_SSA_CODE = 0x03;
         private const int RECORD_TYPE_ELA_CODE = 0x04;
         private const int RECORD_TYPE_SLA_CODE = 0x05;
 
