@@ -17,7 +17,7 @@ namespace FirmwareFiles.Example
                 var exeName = System.IO.Path.GetFileName( System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName );
                 Console.WriteLine( $"USAGE: {exeName} <firmware_file_path>" );
             }
-        }ö
+        }
 
         private static void PrintFirmwareFileInfo( string filepath )
         {
