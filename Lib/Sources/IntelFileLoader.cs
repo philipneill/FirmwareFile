@@ -24,9 +24,9 @@ namespace FirmwareFile
          * 
          * @param [in] filePath Path to the file containing the firmware
          */
-        public static Firmware Load( string filePath )
+        public static Firmware Load( string filePath, bool noBlockMerging = false)
         {
-            return LoadAsync( filePath ).GetAwaiter().GetResult();
+            return LoadAsync( filePath, noBlockMerging ).GetAwaiter().GetResult();
         }
 
         /**
@@ -34,9 +34,9 @@ namespace FirmwareFile
          * 
          * @param [in] stream Stream to provide the firmware file contents
          */
-        public static Firmware Load( Stream stream )
+        public static Firmware Load( Stream stream, bool noBlockMerging = false)
         {
-            return LoadAsync( stream ).GetAwaiter().GetResult();
+            return LoadAsync( stream, noBlockMerging ).GetAwaiter().GetResult();
         }
 
         /**
@@ -44,10 +44,10 @@ namespace FirmwareFile
          * 
          * @param [in] filePath Path to the file containing the firmware
          */
-        public static async Task<Firmware> LoadAsync( string filePath )
+        public static async Task<Firmware> LoadAsync( string filePath, bool noBlockMerging = false)
         {
             using var fileStream = new FileStream( filePath, FileMode.Open, FileAccess.Read );
-            return await LoadAsync( fileStream );
+            return await LoadAsync( fileStream, noBlockMerging );
         }
 
         /**
@@ -55,7 +55,7 @@ namespace FirmwareFile
          * 
          * @param [in] stream Stream to provide the firmware file contents
          */
-        public static async Task<Firmware> LoadAsync( Stream stream )
+        public static async Task<Firmware> LoadAsync( Stream stream, bool noBlockMerging = false)
         {
             var fwFile = new Firmware( true );
 
@@ -89,7 +89,7 @@ namespace FirmwareFile
                         switch( record.Type )
                         {
                             case RecordType.DATA:
-                                ProcessDataRecord( record, fwFile );
+                                ProcessDataRecord( record, fwFile, noBlockMerging );
                                 break;
 
                             case RecordType.EOF:
@@ -272,9 +272,9 @@ namespace FirmwareFile
             return (((UInt32)record.Data[0]) << 12) + (((UInt32)record.Data[1]) << 4);
         }
 
-        private static void ProcessDataRecord( Record record, Firmware fwFile )
+        private static void ProcessDataRecord( Record record, Firmware fwFile, bool noBlockMerging = false )
         {
-            fwFile.SetData( record.Address, record.Data );
+            fwFile.SetData( record.Address, record.Data, noBlockMerging );
         }
 
         /*===========================================================================
