@@ -49,6 +49,7 @@ namespace FirmwareFiles.Example
                 case ".s19":
                 case ".s28":
                 case ".s37":
+                case ".mot":
                     return MotorolaFileLoader.Load( filepath );
 
                 default:

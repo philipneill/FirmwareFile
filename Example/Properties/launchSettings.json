@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "FirmwareFiles.Example": {
+      "commandName": "Project",
+      "commandLineArgs": "\"C:\\Users\\neillp\\Documents\\KT26_0v34_XC2.mot\""
+    }
+  }
+}

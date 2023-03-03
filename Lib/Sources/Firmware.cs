@@ -43,7 +43,7 @@ namespace FirmwareFile
          * @param [in] startAddress Starting address for the data block
          * @param [in] data Data for the data block
          */
-        public void SetData( UInt32 startAddress, byte[] data )
+        public void SetData( UInt32 startAddress, byte[] data, bool noBlockMerging = false )
         {
             if( data.Length == 0 )
             {
@@ -67,7 +67,7 @@ namespace FirmwareFile
                     startBlock = block;
                 }
 
-                if( ( block.StartAddress <= endAddress ) && ( ( block.StartAddress + block.Size ) >= endAddress ) )
+                if( ( block.StartAddress <= endAddress ) && ( ( block.StartAddress + block.Size ) >= endAddress ) && !noBlockMerging)
                 {
                     if( endBlock != null )
                     {
