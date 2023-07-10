@@ -146,6 +146,6 @@ namespace FirmwareFile
          *                           PRIVATE ATTRIBUTES
          *===========================================================================*/
 
-        private List<byte> m_data;
+        private readonly List<byte> m_data;
     }
 }

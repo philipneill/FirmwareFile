@@ -236,6 +236,6 @@ namespace FirmwareFile
          *                           PRIVATE ATTRIBUTES
          *===========================================================================*/
 
-        private List<FirmwareBlock> m_blocks = new List<FirmwareBlock>();
+        private readonly List<FirmwareBlock> m_blocks = new();
     }
 }

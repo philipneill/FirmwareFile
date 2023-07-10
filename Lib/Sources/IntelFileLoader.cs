@@ -228,29 +228,16 @@ namespace FirmwareFile
 
         private static RecordType ConvertToRecordType( int recordTypeCode )
         {
-            switch( recordTypeCode )
+            return recordTypeCode switch
             {
-                case RECORD_TYPE_DATA_CODE:
-                    return RecordType.DATA;
-
-                case RECORD_TYPE_EOF_CODE:
-                    return RecordType.EOF;
-
-                case RECORD_TYPE_ELA_CODE:
-                    return RecordType.EXTENDED_LINEAR_ADDRESS;
-
-                case RECORD_TYPE_ESA_CODE:
-                    return RecordType.EXTENDED_SEGMENT_ADDRESS;
-
-                case RECORD_TYPE_SSA_CODE:
-                    return RecordType.START_SEGMENT_ADDRESS;
-
-                case RECORD_TYPE_SLA_CODE:
-                    return RecordType.START_LINEAR_ADDRESS;
-
-                default:
-                    throw new Exception( $"Unsupported record type '{recordTypeCode:X2}h'" );
-            }
+                RECORD_TYPE_DATA_CODE => RecordType.DATA,
+                RECORD_TYPE_EOF_CODE => RecordType.EOF,
+                RECORD_TYPE_ELA_CODE => RecordType.EXTENDED_LINEAR_ADDRESS,
+                RECORD_TYPE_ESA_CODE => RecordType.EXTENDED_SEGMENT_ADDRESS,
+                RECORD_TYPE_SSA_CODE => RecordType.START_SEGMENT_ADDRESS,
+                RECORD_TYPE_SLA_CODE => RecordType.START_LINEAR_ADDRESS,
+                _ => throw new Exception($"Unsupported record type '{recordTypeCode:X2}h'"),
+            };
         }
 
         private static UInt32 GetExtendedLinearAddress(Record record)

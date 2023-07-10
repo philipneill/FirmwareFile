@@ -65,7 +65,7 @@ namespace FirmwareFile
 
             byte[] data = new byte[dataSize];
 
-            if( await stream.ReadAsync( data, 0, dataSize ) != dataSize )
+            if( await stream.ReadAsync(data.AsMemory(0, dataSize)) != dataSize )
             {
                 throw new Exception( "Couldn't read binary file contents" );
             }

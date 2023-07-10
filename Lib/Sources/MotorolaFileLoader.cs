@@ -224,17 +224,12 @@ namespace FirmwareFile
 
         private static int GetAddressSize( RecordType recordType )
         {
-            switch( recordType )
+            return recordType switch
             {
-                case RecordType.S2:
-                    return 6;
-
-                case RecordType.S3:
-                    return 8;
-
-                default:
-                    return 4;
-            }
+                RecordType.S2 => 6,
+                RecordType.S3 => 8,
+                _ => 4,
+            };
         }
 
         private static void ProcessDataRecord( Record record, Firmware fwFile )
